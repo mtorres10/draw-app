@@ -16,8 +16,9 @@ export default function PdfViewer({ url }) {
       const canvas = canvasRef.current;
       canvas.height = viewport.height;
       canvas.width = viewport.width;
-      //canvasRef.width = canvas.width;
-      //canvasRef.height = canvas.height;
+      var overlayCanvas = document.getElementById("overlay-canvas");
+      overlayCanvas.width = canvas.width;
+      overlayCanvas.height = canvas.height;
       const renderContext = {
         canvasContext: canvas.getContext('2d'),
         viewport: viewport

@@ -4,19 +4,22 @@ import getStroke from "perfect-freehand";
 import PdfViewer from "./pdfViewer";
 
 const generator = rough.generator();
-var theCanvas = document.getElementById("the-canvas");
+
 var overlayCanvas = document.getElementById("overlay-canvas");
+var theCanvas = document.getElementById("the-canvas");
+
 
 const createElement = (id, x1, y1, x2, y2, type) => {
   switch (type) {
     case "line":
     case "rectangle":
+      var overlayCanvas = document.getElementById("overlay-canvas");
       const roughElement =
         type === "line"
           ? generator.line(x1, y1, x2, y2)
           : generator.rectangle(
-            x1 + window.scrollX,
-            y1 + window.scrollY,
+            x1 + window.scrollX  - overlayCanvas.offsetLeft,
+            y1 + window.scrollY - overlayCanvas.offsetTop,
             (x2 + window.scrollX) - (x1 + window.scrollX),
             (y2 + window.scrollY) - (y1 + window.scrollY),
             { roughness: 0 });
@@ -325,7 +328,7 @@ const App = () => {
 
   return (
     <div>
-      <div style={{ position: "fixed" }}>
+      <div id='main' style={{ position: "relative" }}>
         <input
           type="radio"
           id="selection"
@@ -350,31 +353,27 @@ const App = () => {
         />
         <label htmlFor="pencil">Pencil</label>
       </div>
-      <div style={{ position: "fixed", bottom: 0, padding: 10 }}>
+      <div style={{ position: "relative", bottom: 0, padding: 10 }}>
         <button onClick={undo}>Undo</button>
         <button onClick={redo}>Redo</button>
       </div>
-
       <div id="container">
-
         <PdfViewer url='http://localhost:3000/file-example_PDF_500_kB.pdf' ref={overlayCanvas} />
-
         <canvas
           id="overlay-canvas"
-          width={1000}
-          height={1000}
+          width={500}
+          height={500}
           onMouseDown={handleMouseDown}
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUp}
         >
           Canvas
         </canvas>
-
-
       </div>
     </div>
   );
 };
+
 
 
 export default App;
