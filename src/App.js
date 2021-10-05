@@ -15,11 +15,15 @@ const createElement = (id, x1, y1, x2, y2, type) => {
         type === "line"
           ? generator.line(x1, y1, x2, y2)
           : generator.rectangle(
-            x1 +  window.scrollX,
+            x1 + window.scrollX,
             y1 + window.scrollY,
             (x2 + window.scrollX) - (x1 + window.scrollX),
             (y2 + window.scrollY) - (y1 + window.scrollY),
             { roughness: 0 });
+      let lx1 = x1 + window.scrollX;
+      let ly1 = y1 + window.scrollY;
+      let lx2 = x2 + window.scrollX;
+      let ly2 = y2 + window.scrollY;
       return { id, x1, y1, x2, y2, type, roughElement };
     case "pencil":
       return { id, type, points: [{ x: x1, y: y1 }] };
