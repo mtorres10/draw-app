@@ -14,7 +14,12 @@ const createElement = (id, x1, y1, x2, y2, type) => {
       const roughElement =
         type === "line"
           ? generator.line(x1, y1, x2, y2)
-          : generator.rectangle(x1, y1, x2 - x1, y2 - y1, { roughness: 0 });
+          : generator.rectangle(
+            x1 +  window.scrollX,
+            y1 + window.scrollY,
+            (x2 + window.scrollX) - (x1 + window.scrollX),
+            (y2 + window.scrollY) - (y1 + window.scrollY),
+            { roughness: 0 });
       return { id, x1, y1, x2, y2, type, roughElement };
     case "pencil":
       return { id, type, points: [{ x: x1, y: y1 }] };
@@ -311,6 +316,7 @@ const App = () => {
     }
     setAction("none");
     setSelectedElement(null);
+    console.log(elements);
   };
 
   return (
@@ -347,8 +353,8 @@ const App = () => {
 
       <div id="container">
 
-      <PdfViewer url='http://localhost:3000/file-example_PDF_500_kB.pdf' ref={overlayCanvas} />
-   
+        <PdfViewer url='http://localhost:3000/file-example_PDF_500_kB.pdf' ref={overlayCanvas} />
+
         <canvas
           id="overlay-canvas"
           width={1000}
@@ -359,7 +365,7 @@ const App = () => {
         >
           Canvas
         </canvas>
-        
+
 
       </div>
     </div>
