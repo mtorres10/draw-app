@@ -1,6 +1,7 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import rough from "roughjs/bundled/rough.esm";
 import getStroke from "perfect-freehand";
+import PdfViewer from "./pdfViewer";
 
 const generator = rough.generator();
 
@@ -181,7 +182,7 @@ const App = () => {
   const [selectedElement, setSelectedElement] = useState(null);
 
   useLayoutEffect(() => {
-    const canvas = document.getElementById("canvas");
+    const canvas = document.getElementById("overlay-canvas");
     const context = canvas.getContext("2d");
     context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -340,16 +341,32 @@ const App = () => {
         <button onClick={undo}>Undo</button>
         <button onClick={redo}>Redo</button>
       </div>
+
+      <div id="container">
+
+      
       <canvas
-        id="canvas"
-        width={window.innerWidth}
-        height={window.innerHeight}
+        id="the-canvas"
+        width={500}
+        height={500}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
       >
         Canvas
       </canvas>
+      <canvas
+        id="overlay-canvas"
+        width={500}
+        height={500}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+      >
+        Canvas
+      </canvas>
+      <PdfViewer url='./files/example.pdf' />
+      </div>
     </div>
   );
 };
