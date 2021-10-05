@@ -2,7 +2,10 @@ import React, { useEffect, useLayoutEffect, useState, useRef } from "react";
 import rough from "roughjs/bundled/rough.esm";
 import getStroke from "perfect-freehand";
 import PdfViewer from "./pdfViewer";
-
+//import { Popover } from 'react-tiny-popover'
+import Button from 'react-bootstrap/Button';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Popover from 'react-bootstrap/Popover';
 const generator = rough.generator();
 
 var overlayCanvas = document.getElementById("overlay-canvas");
@@ -10,28 +13,35 @@ var theCanvas = document.getElementById("the-canvas");
 
 
 const createElement = (id, x1, y1, x2, y2, type) => {
+  let overlayCanvas = document.getElementById("overlay-canvas");
   switch (type) {
     case "line":
     case "rectangle":
-      var overlayCanvas = document.getElementById("overlay-canvas");
+
       const roughElement =
         type === "line"
-          ? generator.line(x1, y1, x2, y2)
-          : generator.rectangle(
-            x1 + window.scrollX  - overlayCanvas.offsetLeft,
+          ? generator.line(
+            x1 + window.scrollX - overlayCanvas.offsetLeft,
             y1 + window.scrollY - overlayCanvas.offsetTop,
-            (x2 + window.scrollX) - (x1 + window.scrollX),
-            (y2 + window.scrollY) - (y1 + window.scrollY),
+            x2 + window.scrollX - overlayCanvas.offsetLeft,
+            y2 + window.scrollY - overlayCanvas.offsetTop,
+            { roughness: 0 })
+          : generator.rectangle(
+            x1 + window.scrollX - overlayCanvas.offsetLeft,
+            y1 + window.scrollY - overlayCanvas.offsetTop,
+            (x2 + window.scrollX) - (x1 + window.scrollX) ,
+            (y2 + window.scrollY) - (y1 + window.scrollY) ,
             { roughness: 0 });
-      let lx1 = x1 + window.scrollX;
-      let ly1 = y1 + window.scrollY;
-      let lx2 = x2 + window.scrollX;
-      let ly2 = y2 + window.scrollY;
+      let lx1 = x1 + window.scrollX - overlayCanvas.offsetLeft;
+      let ly1 = y1 + window.scrollY - overlayCanvas.offsetTop;
+      let lx2 = x2 + window.scrollX - overlayCanvas.offsetLeft;
+      let ly2 = y2 + window.scrollY - overlayCanvas.offsetTop;
+      console.log({ lx1, ly1, lx2, ly2 })
       return { id, x1, y1, x2, y2, type, roughElement };
     case "pencil":
-      return { id, type, points: [{ x: x1, y: y1 }] };
+      return { id, type, points: [{ x: x1 + window.scrollX - overlayCanvas.offsetLeft, y: y1 + window.scrollY - overlayCanvas.offsetTop }] };
     default:
-      throw new Error(`Type not recognised: ${type}`);
+      throw new Error(`Type not recognized: ${type}`);
   }
 };
 
@@ -325,6 +335,15 @@ const App = () => {
     setSelectedElement(null);
     console.log(elements);
   };
+  const popover = (
+    <Popover id="popover-basic">
+      <Popover.Header as="h3">Popover right</Popover.Header>
+      <Popover.Body>
+        And here's some <strong>amazing</strong> content. It's very engaging.
+        right?
+      </Popover.Body>
+    </Popover>
+  );
 
   return (
     <div>
@@ -369,6 +388,9 @@ const App = () => {
         >
           Canvas
         </canvas>
+        <OverlayTrigger trigger="click" placement="right" overlay={popover}>
+          <Button variant="success">Click me to see</Button>
+        </OverlayTrigger>
       </div>
     </div>
   );
