@@ -24,6 +24,12 @@ code {
   z-index: 1;
 }
 
+#the-canvas2 {
+  border: 1px solid black;
+  position: absolute;
+  z-index: 1;
+}
+
 #overlay-canvas {
   border: 1px solid red;
   position: relative;

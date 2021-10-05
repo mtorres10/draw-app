@@ -1,9 +1,11 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState, useRef } from "react";
 import rough from "roughjs/bundled/rough.esm";
 import getStroke from "perfect-freehand";
 import PdfViewer from "./pdfViewer";
 
 const generator = rough.generator();
+var theCanvas = document.getElementById("the-canvas");
+var overlayCanvas = document.getElementById("overlay-canvas");
 
 const createElement = (id, x1, y1, x2, y2, type) => {
   switch (type) {
@@ -180,6 +182,7 @@ const App = () => {
   const [action, setAction] = useState("none");
   const [tool, setTool] = useState("rectangle");
   const [selectedElement, setSelectedElement] = useState(null);
+  //const child1 = useRef(null);
 
   useLayoutEffect(() => {
     const canvas = document.getElementById("overlay-canvas");
@@ -344,31 +347,24 @@ const App = () => {
 
       <div id="container">
 
-      
-      <canvas
-        id="the-canvas"
-        width={500}
-        height={500}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-      >
-        Canvas
-      </canvas>
-      <canvas
-        id="overlay-canvas"
-        width={500}
-        height={500}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-      >
-        Canvas
-      </canvas>
-      <PdfViewer url='./files/example.pdf' />
+      <PdfViewer url='http://localhost:3000/file-example_PDF_500_kB.pdf' ref={overlayCanvas} />
+   
+        <canvas
+          id="overlay-canvas"
+          width={1000}
+          height={1000}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+        >
+          Canvas
+        </canvas>
+        
+
       </div>
     </div>
   );
 };
+
 
 export default App;
